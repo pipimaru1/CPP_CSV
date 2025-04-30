@@ -232,11 +232,16 @@ int load_csv(std::vector<CsvData>& _records, std::wifstream& _wif)
         std::getline(iss, cell, L',');
         rec.ConfidenceThreshold = static_cast<float>(std::wcstod(cell.c_str(), nullptr));
 
-        // 14–21: x0, y0, x1, y1, xc, yc, Width, Height
+        /////////////////////////////////////////////////////////////////
+        // ラムダ式 は「関数オブジェクトを即席で定義する」ための構文
+        //[&] による参照キャプチャで、外側スコープの変数を自由に操作できる
+        //auto 宣言で型を気にせず使え、コードの重複を減らして可読性を高める
         auto readInt = [&](int& target) {
             std::getline(iss, cell, L',');
             target = static_cast<int>(std::wcstol(cell.c_str(), nullptr, 10));
             };
+
+        // 14–21: x0, y0, x1, y1, xc, yc, Width, Height
         readInt(rec.x0);
         readInt(rec.y0);
         readInt(rec.x1);
